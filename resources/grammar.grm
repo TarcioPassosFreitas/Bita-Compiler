@@ -1,0 +1,223 @@
+"Name"           = 'Bita Language'
+"Author"         = 'Tarcio & Bianca'
+"Version"        = 'v0.0.1'
+"About"          = 'A grammar made to study how compilers are made'
+"Case Sensitive" = 'true'
+"Start Symbol"   = <start>
+
+{String Chars} = {Printable} + {HT} - ["]
+ide            = {Letter}{AlphaNumeric}* | {Letter}
+string         = '"' {String Chars}* '"'
+int            = {Number}+
+real           = {Number}+'.'{Number}+
+
+<incr> ::= '++' |
+    '--'
+
+<mult> ::= '*' |
+    '/'
+
+<soma> ::= '+' |
+    '-'
+
+<log_operator> ::= '!' |
+    '||' |
+    '&&'
+
+<rel> ::= '>' |
+    '<' |
+    '>=' |
+    '<=' |
+    '==' |
+    '!='
+
+<boolean> ::= 'true' |
+    'false'
+
+<valor> ::= ide |
+    <boolean> |
+    int |
+    real |
+    string
+
+<tipo> ::= 'int' |
+    'real' |
+    'boolean' |
+    'string' |
+    ide
+
+<var> ::= 'var' '{' <var_var> '}'
+
+<variable_access> ::= ide <matrix_access>
+
+<var_var> ::= <tipo> <var_aux2> <var_attribution> ';' <var_var> |
+
+<var_aux2> ::= <variable_access> <var2>
+
+<var_attribution> ::= <atrib> <var2> |
+
+<var2> ::= ',' <var_aux2> |
+
+<const> ::= const '{' <var_const> '}' |
+    ',' <const_aux> |
+    ';'
+
+<var_const> ::= <tipo> <const_aux> <var_const> |
+
+
+<const_aux> ::= ide '=' <valor> <const>
+
+<struct_bloco> ::= struct ide '{' <struct_var> '}'
+
+<struct_var> ::= <tipo> <struct_aux> <struct_var> |
+    ide <struct_aux> <struct_var> |
+
+
+<struct_aux> ::= ide <struct2> |
+    <vetor> <struct2>
+
+<struct2> ::= ',' <struct_aux> |
+    ';'
+
+<log> ::= <log2> <log_aux> |
+    <boolean> <log_aux>
+
+<log_aux> ::= <log_operator> <log> <log_aux> |
+
+
+<log2> ::= <log3> <log2_aux>
+
+<log2_aux> ::= <rel> <log2> <log2_aux> |
+
+
+<log3> ::= <exp> <log_expression_attrib> |
+    '(' <log> ')'
+
+<log_expression_attrib> ::= <rel> <exp> |
+
+
+<_log> ::= <_log2> <_log_aux> |
+    <boolean> <_log_aux>
+
+<_log_aux> ::= <log_operator> <_log> <_log_aux> |
+
+
+<_log2> ::= <_log3> <_log2_aux>
+
+<_log2_aux> ::= <rel> <_log2> <_log2_aux> |
+
+
+<_log3> ::= <exp> <rel> <exp> |
+    '(' <_log> ')'
+
+<exp> ::= <exp_2> <exp_aux>
+
+<exp_aux> ::= <soma> <exp> <exp_aux> |
+
+
+<exp_2> ::= <exp_3> <exp_2_aux>
+
+<exp_2_aux> ::= <mult> <exp_2> <exp_2_aux> |
+
+
+<exp_3> ::= <incr> <exp_3> <exp_3_aux> |
+    <exp_4> <exp_3_aux>
+
+<exp_3_aux> ::= <incr> <exp_3_aux> |
+
+
+<exp_4> ::= '(' <exp> ')' |
+    int |
+    real |
+    ide |
+    <vetor> |
+    <struct_exp> <functionline>
+
+<parametro> ::= <tipo> ide <matrix_access> <multi_param>
+
+<multi_param> ::= ',' <parametro> |
+
+<declararG> ::= function <tipo> ide '(' <parametro> ')' '{' <codigo> 'return' <log> ';' '}' |
+    procedure ide '(' <parametro> ')' '{' <codigo> '}' |
+    <struct_bloco> |
+
+
+<if> ::= if '(' <_log> ')' then '{' <codigo> '}' <else>
+
+<while> ::= while '(' <_log> ')' '{' <codigo> '}'
+
+<else> ::= else '{' <codigo> '}' |
+
+
+<codigo> ::= <if> <codigo> |
+    <while> <codigo> |
+    <print> <codigo> |
+    <read> <codigo> |
+    <var> <codigo> |
+    ide <var_manipulation> |
+
+<var_manipulation> ::= <code_attribution> <codigo> |  <array> <atrib> <codigo>
+
+<code_attribution> ::= <atrib> |
+    <struct> |
+    <function> |
+    <functionline>
+
+<vector_position> ::= ide |
+    int
+
+<vector_access> ::= '[' <vector_position> ']'
+
+<matrix_access> ::= <vector_access> |
+
+<array> ::= <vector_access> <matrix_access>
+
+<vetor> ::= ide <array>
+
+<function> ::= '(' <bloco> ')'
+
+<functionline> ::= '(' <bloco> ')' ';'
+
+<atrib> ::= '=' <log> ';'
+
+<struct> ::= '.' ide '=' <log> ';'
+
+<struct_exp> ::= ide '.' ide
+
+<read> ::= read '(' <blocoR> ')' ';'
+
+<element_access> ::= <array> |
+
+<blocoR> ::= ide <element_access>
+
+<print> ::= print '(' <valorPrintAux> ')' ';'
+
+<valorPrint2> ::= <function> |
+    string |
+    <log> |
+
+
+<valorPrintAux> ::= <valorPrint2> <valorPrint>
+
+<valorPrint> ::= ',' <valorPrintAux> |
+
+
+<bloco> ::= <valorPrintAux>
+
+<start> ::= <declararG> <start> |
+    <var> <start2> |
+    <const> <start1> |
+    <final>
+
+<start1> ::= <declararG> <start1> |
+    <var> <start final> |
+    <final>
+
+<start2> ::= <declararG> <start2> |
+    <const> <start final> |
+    <final>
+
+<start final> ::= <declararG> <start final> |
+    <final>
+
+<final> ::= start '{' <codigo> '}'

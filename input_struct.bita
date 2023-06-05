@@ -1,0 +1,8 @@
+struct teste
+{
+string a;
+}
+start
+{
+teste.a = 3;
+}

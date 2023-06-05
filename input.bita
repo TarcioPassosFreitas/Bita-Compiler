@@ -1,0 +1,15 @@
+// This is a line comment
+function real calculateArea(int width[2], int height) {
+var {
+	real area;
+}
+area = width * height;
+return area;
+}
+
+start {
+var {
+    string b = "asdasda";
+}
+calculateArea(2.06,3);
+}
